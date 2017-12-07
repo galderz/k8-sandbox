@@ -5,21 +5,21 @@ items:
   metadata:
     labels:
       template: infinispan-ephemeral
-    name: infinispan-app
+    name: infinispan
 - apiVersion: v1
   groupNames: null
   kind: RoleBinding
   metadata:
     labels:
       template: infinispan-ephemeral
-    name: infinispan-app-view
+    name: infinispan-view
   roleRef:
     name: view
   subjects:
   - kind: ServiceAccount
-    name: infinispan-app
+    name: infinispan
   userNames:
-  - system:serviceaccount:myproject:infinispan-app
+  - system:serviceaccount:myproject:infinispan
 - apiVersion: v1
   kind: Secret
   metadata:
@@ -28,7 +28,7 @@ items:
       template.openshift.io/expose-infinispan.client.hotrod.auth_username: '{.data[''application-user'']}'
     labels:
       template: infinispan-ephemeral
-    name: infinispan-app
+    name: infinispan
   stringData:
     application-password: v7FQnJ8y
     application-user: OqIe3cpb
@@ -40,15 +40,15 @@ items:
     annotations:
       description: The web server's HTTP port.
     labels:
-      application: infinispan-app
+      application: infinispan
       template: infinispan-ephemeral
-    name: infinispan-app-http
+    name: infinispan-http
   spec:
     ports:
     - port: 8080
       targetPort: 8080
     selector:
-      deploymentConfig: infinispan-app
+      deploymentConfig: infinispan
 - apiVersion: v1
   kind: Service
   metadata:
@@ -56,30 +56,30 @@ items:
       description: Hot Rod's port.
       template.openshift.io/expose-infinispan.client.hotrod.server_list: '{.spec.clusterIP}:{.spec.ports[0].port}'
     labels:
-      application: infinispan-app
+      application: infinispan
       template: infinispan-ephemeral
-    name: infinispan-app-hotrod
+    name: infinispan-hotrod
   spec:
     ports:
     - port: 11222
       targetPort: 11222
     selector:
-      deploymentConfig: infinispan-app
+      deploymentConfig: infinispan
 - apiVersion: v1
   kind: Service
   metadata:
     annotations:
       description: The management console.
     labels:
-      application: infinispan-app
+      application: infinispan
       template: infinispan-ephemeral
-    name: infinispan-app-management
+    name: infinispan-management
   spec:
     ports:
     - port: 9990
       targetPort: 9990
     selector:
-      deploymentConfig: infinispan-app
+      deploymentConfig: infinispan
 - apiVersion: v1
   data:
     cloud-ephemeral.xml: |
@@ -532,34 +532,34 @@ items:
   kind: ConfigMap
   metadata:
     labels:
-      application: infinispan-app
+      application: infinispan
       template: infinispan-ephemeral
-    name: infinispan-app-configuration
+    name: infinispan-configuration
 - apiVersion: v1
-  id: infinispan-app-management
+  id: infinispan-management
   kind: Route
   metadata:
     annotations:
       description: Route for the management console.
     labels:
-      application: infinispan-app
+      application: infinispan
       template: infinispan-ephemeral
-    name: infinispan-app-management
+    name: infinispan-management
   spec:
     to:
       kind: Service
-      name: infinispan-app-management
+      name: infinispan-management
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
     labels:
-      application: infinispan-app
+      application: infinispan
       template: infinispan-ephemeral
-    name: infinispan-app
+    name: infinispan
   spec:
     replicas: 1
     selector:
-      deploymentConfig: infinispan-app
+      deploymentConfig: infinispan
     strategy:
       rollingParams:
         intervalSeconds: 20
@@ -571,9 +571,9 @@ items:
     template:
       metadata:
         labels:
-          application: infinispan-app
-          deploymentConfig: infinispan-app
-        name: infinispan-app
+          application: infinispan
+          deploymentConfig: infinispan
+        name: infinispan
       spec:
         containers:
         - args:
@@ -581,13 +581,13 @@ items:
           - -Djboss.default.jgroups.stack=kubernetes
           env:
           - name: OPENSHIFT_KUBE_PING_LABELS
-            value: application=infinispan-app
+            value: application=infinispan
           - name: OPENSHIFT_KUBE_PING_NAMESPACE
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
           - name: KUBERNETES_LABELS
-            value: application=infinispan-app
+            value: application=infinispan
           - name: KUBERNETES_NAMESPACE
             valueFrom:
               fieldRef:
@@ -610,7 +610,7 @@ items:
             periodSeconds: 60
             successThreshold: 1
             timeoutSeconds: 80
-          name: infinispan-app
+          name: infinispan
           ports:
           - containerPort: 8080
             name: http
@@ -639,13 +639,13 @@ items:
               memory: 512Mi
           volumeMounts:
           - mountPath: /opt/jboss/infinispan-server/standalone/configuration/custom
-            name: infinispan-app-configuration
-        serviceAccountName: infinispan-app
+            name: infinispan-configuration
+        serviceAccountName: infinispan
         terminationGracePeriodSeconds: 120
         volumes:
         - configMap:
-            name: infinispan-app-configuration
-          name: infinispan-app-configuration
+            name: infinispan-configuration
+          name: infinispan-configuration
     triggers:
     - type: ConfigChange
 kind: List
