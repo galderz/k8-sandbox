@@ -550,6 +550,20 @@ items:
       kind: Service
       name: infinispan-management
 - apiVersion: v1
+  id: infinispan-http
+  kind: Route
+  metadata:
+    annotations:
+      description: Route for the HTTP endpoint.
+    labels:
+      application: infinispan
+      template: infinispan-ephemeral
+    name: infinispan-http
+  spec:
+    to:
+      kind: Service
+      name: infinispan-http
+- apiVersion: v1
   kind: DeploymentConfig
   metadata:
     labels:
