@@ -30,8 +30,8 @@ items:
       template: infinispan-ephemeral
     name: infinispan
   stringData:
-    application-password: v7FQnJ8y
-    application-user: OqIe3cpb
+    application-password: developer
+    application-user: developer
     management-password: wI6QtNOt
     management-user: PrMhfbvx
 - apiVersion: v1
@@ -611,9 +611,9 @@ items:
           - name: MGMT_PASS
             value: wI6QtNOt
           - name: APP_USER
-            value: OqIe3cpb
+            value: developer
           - name: APP_PASS
-            value: v7FQnJ8y
+            value: developer
           image: jboss/infinispan-server:9.1.0.Final-2
           livenessProbe:
             exec:
