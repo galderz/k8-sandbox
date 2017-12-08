@@ -1,0 +1,13 @@
+* Kubernetes Sandbox
+Having some fun with Kubernetes orchestration :)
+* Infinispan on OpenShift
+Start OpenShift:
+#+BEGIN_SRC shell
+oc cluster up
+#+END_SRC
+Start Infinispan with a sample definition:
+#+BEGIN_SRC shell
+cd oc-config
+oc apply -f .
+#+END_SRC
+Just call `oc apply` whenever you make changes.
