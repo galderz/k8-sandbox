@@ -11,3 +11,23 @@ cd oc-config
 oc apply -f .
 #+END_SRC
 Just call `oc apply` whenever you make changes.
+* Store and retrieve data
+You can store and retrieve data into Infinispan directly from the command line.
+This is possible thanks to the Infinispan HTTP REST API.
+This HTTP endpoint has been added as route so that its accessible externally.
+So, data can be stored as simply as:
+#+BEGIN_SRC shell
+% echo "Hello" | curl -v -u developer:developer -X PUT -d @- \
+  --header "Content-Type: text/plain" \
+  http://infinispan-http-myproject.127.0.0.1.nip.io/rest/default/a
+...
+< HTTP/1.1 200 OK
+...
+#+END_SRC
+And it can be retrieve via:
+#+BEGIN_SRC shell
+% curl -u developer:developer \
+  --header "Accept: text/plain" -o - \
+  http://infinispan-http-myproject.127.0.0.1.nip.io/rest/default/a
+Hello
+#+END_SRC
