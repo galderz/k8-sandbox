@@ -24,7 +24,7 @@ So, data can be stored as simply as:
 < HTTP/1.1 200 OK
 ...
 #+END_SRC
-And it can be retrieve via:
+And it can be retrieved via:
 #+BEGIN_SRC shell
 % curl -u developer:developer \
   --header "Accept: text/plain" -o - \
