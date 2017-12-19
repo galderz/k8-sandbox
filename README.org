@@ -10,7 +10,7 @@ Start Infinispan with a sample definition:
 cd oc-config
 oc apply -f .
 #+END_SRC
-Just call `oc apply` whenever you make changes.
+Just call ~oc apply~ whenever you make changes.
 * Store and retrieve data
 You can store and retrieve data into Infinispan directly from the command line.
 This is possible thanks to the Infinispan HTTP REST API.
