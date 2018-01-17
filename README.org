@@ -11,11 +11,22 @@ cd oc-config
 oc apply -f .
 #+END_SRC
 Just call ~oc apply~ whenever you make changes.
+* Infinispan on Kubernetes @ minikube
+Start minikube:
+#+BEGIN_SRC shell
+minikube start
+#+END_SRC
+Start Infinispan with a sample definition:
+#+BEGIN_SRC shell
+cd kube-config
+kubectl apply -f .
+#+END_SRC
 * Store and retrieve data
 You can store and retrieve data into Infinispan directly from the command line.
 This is possible thanks to the Infinispan HTTP REST API.
 This HTTP endpoint has been added as route so that its accessible externally.
 So, data can be stored as simply as:
+** On OpenShift
 #+BEGIN_SRC shell
 % echo "Hello" | curl -v -u developer:developer -X PUT -d @- \
   --header "Content-Type: text/plain" \
@@ -29,5 +40,27 @@ And it can be retrieved via:
 % curl -u developer:developer \
   --header "Accept: text/plain" -o - \
   http://infinispan-http-myproject.127.0.0.1.nip.io/rest/default/a
+Hello
+#+END_SRC
+** On Kubernetes
+Find out minikube IP address:
+#+BEGIN_SRC shell
+minikube ip
+> 192.168.99.100
+#+END_SRC
+Then store some data:
+#+BEGIN_SRC shell
+% echo "Hello" | curl -v -u developer:developer -X PUT -d @- \
+  --header "Content-Type: text/plain" \
+  https://192.168.99.100/infinispan/rest/default/a --insecure
+...
+< HTTP/2 200
+...
+#+END_SRC
+And retrieve data:
+#+BEGIN_SRC shell
+% curl -u developer:developer \
+  --header "Accept: text/plain" -o - \
+  https://192.168.99.100/infinispan/rest/default/a --insecure
 Hello
 #+END_SRC
